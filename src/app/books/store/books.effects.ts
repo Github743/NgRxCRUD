@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { BooksService } from "../books.service";
 import { booksFetchAPISuccess, deleteBookAPISuccess, invokeBooksAPI, invokeDeleteBookAPI, invokeSaveBookAPI, invokeUpdateBookAPI, saveBookAPISuccess, updateBookAPISuccess } from "./books.action";
-import { delay, map, switchMap } from "rxjs";
+import { delay, interval, map, switchMap } from "rxjs";
 import { Store } from "@ngrx/store";
 import { Appstate } from "src/app/shared/store/appstate";
 import { setAPIStatus } from "src/app/shared/store/app.action";
@@ -13,6 +13,10 @@ export class BooksEffects {
         private appStore: Store<Appstate>) {
 
     }
+
+    refreshBookEveryFiveMinutes$ = createEffect(() => {
+        return interval(1000 * 60 * 5).pipe(map(() => invokeBooksAPI()))
+    })
 
     loadAllBooks$ = createEffect(() =>
         this.actions$.pipe(
