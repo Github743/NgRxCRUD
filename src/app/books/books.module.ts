@@ -10,12 +10,14 @@ import { BooksEffects } from './store/books.effects';
 import { AddComponent } from './add/add.component';
 import { FormsModule } from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     AddComponent,
-    EditComponent
+    EditComponent,
+    ListComponent
   ],
   imports: [
     CommonModule,
