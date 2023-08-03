@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { selectBooks } from '../store/books.selector';
+import { getBooks, selectBooks } from '../store/books.selector';
 import { invokeBooksAPI, invokeDeleteBookAPI } from '../store/books.action';
 import { selectAppState } from 'src/app/shared/store/app.selector';
 import { Appstate } from 'src/app/shared/store/appstate';
@@ -21,11 +21,18 @@ export class ListComponent implements OnInit {
     private router: Router
   ) { }
 
-  books$ = this.store.pipe(select(selectBooks));
+  books$ = this.store.pipe(select(getBooks));
   ngOnInit(): void {
 
-    //this.store.dispatch(invokeBooksAPI());
+    this.store.dispatch(invokeBooksAPI());
 
+  }
+
+  refresh() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 
 }

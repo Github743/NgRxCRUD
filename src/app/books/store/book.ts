@@ -6,5 +6,12 @@ export interface Book {
 }
 
 export interface BookState {
-    books: Book[]
+    books: Book[],
+    expired: boolean
+}
+
+export interface Employee {
+    name: string,
+    role: string,
+    skills: string
 }

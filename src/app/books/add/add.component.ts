@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Book } from '../store/book';
 import { Store, select } from '@ngrx/store';
-import { invokeSaveBookAPI } from '../store/books.action';
+import { invokeBooksAPI, invokeSaveBookAPI } from '../store/books.action';
 import { Appstate } from 'src/app/shared/store/appstate';
 import { selectAppState } from 'src/app/shared/store/app.selector';
 import { Router } from '@angular/router';
@@ -26,7 +26,7 @@ export class AddComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.store.dispatch(invokeBooksAPI());
   }
   cancel() {
     this.router.navigate(['/']);

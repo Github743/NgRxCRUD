@@ -15,9 +15,9 @@ import { ListComponent } from './list/list.component';
 @NgModule({
   declarations: [
     HomeComponent,
+    ListComponent,
     AddComponent,
-    EditComponent,
-    ListComponent
+    EditComponent
   ],
   imports: [
     CommonModule,

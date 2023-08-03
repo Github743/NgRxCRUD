@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { selectBooks } from '../store/books.selector';
+import { getBooks, selectBooks } from '../store/books.selector';
 import { invokeBooksAPI, invokeDeleteBookAPI } from '../store/books.action';
 import { selectAppState } from 'src/app/shared/store/app.selector';
 import { Appstate } from 'src/app/shared/store/appstate';
 import { setAPIStatus } from 'src/app/shared/store/app.action';
 import { Router } from '@angular/router';
+import { Book, BookState } from '../store/book';
 
 declare var window: any;
 
@@ -17,11 +18,11 @@ declare var window: any;
 export class HomeComponent implements OnInit {
 
   constructor(private store: Store,
-    private appStore: Store<Appstate>,
+    private appStore: Store<BookState>,
     private router: Router
   ) { }
 
-  books$ = this.store.pipe(select(selectBooks));
+  books$ = this.store.pipe(select(getBooks));;
   deleteModal: any;
   idToDelete: number = 0;
 
@@ -31,7 +32,6 @@ export class HomeComponent implements OnInit {
     );
 
     this.store.dispatch(invokeBooksAPI());
-
   }
 
   openDeleteModal(id: number) {
@@ -39,7 +39,11 @@ export class HomeComponent implements OnInit {
     this.deleteModal.show();
   }
 
-  closeModal(){
+  refresh() {
+    this.router.navigateByUrl('/');
+  }
+
+  closeModal() {
     this.deleteModal.hide();
   }
 

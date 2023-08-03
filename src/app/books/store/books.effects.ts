@@ -1,11 +1,16 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { BooksService } from "../books.service";
-import { booksFetchAPISuccess, deleteBookAPISuccess, invokeBooksAPI, invokeDeleteBookAPI, invokeSaveBookAPI, invokeUpdateBookAPI, saveBookAPISuccess, updateBookAPISuccess } from "./books.action";
-import { delay, interval, map, switchMap } from "rxjs";
+import {
+    booksFetchAPISuccess, deleteBookAPISuccess, invokeBooksAPI,
+    invokeDeleteBookAPI, invokeSaveBookAPI, invokeUpdateBookAPI,
+    saveBookAPISuccess, updateBookAPISuccess, resetBooks, setData
+} from "./books.action";
+import { delay, filter, map, switchMap, tap, withLatestFrom } from "rxjs";
 import { Store } from "@ngrx/store";
 import { Appstate } from "src/app/shared/store/appstate";
 import { setAPIStatus } from "src/app/shared/store/app.action";
+import { isExpired, selectBooks } from '../store/books.selector';
 
 @Injectable()
 export class BooksEffects {
@@ -13,17 +18,41 @@ export class BooksEffects {
         private appStore: Store<Appstate>) {
 
     }
+    // refreshBookEveryFiveMinutes$ = createEffect(() => {
+    //     return interval(1000 * 60 * 1).pipe(map(() => invokeBooksAPI()))
+    // })
 
-    refreshBookEveryFiveMinutes$ = createEffect(() => {
-        return interval(1000 * 60 * 5).pipe(map(() => invokeBooksAPI()))
-    })
-
+    //     loadData$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //       ofType(invokeBooksAPI), // Replace with your action type
+    //       switchMap(() =>
+    //         this.bookService.get().pipe(
+    //           map((data) => setData({ data }))
+    //         )
+    //       )
+    //     )
+    //   );
     loadAllBooks$ = createEffect(() =>
         this.actions$.pipe(
             ofType(invokeBooksAPI),
+            withLatestFrom(this.appStore.select(isExpired)),
+            tap(([action, isExpired]) => console.log(isExpired)),
+            filter(([action, isExpired]) => isExpired),
             switchMap(() => {
                 return this.bookService.get()
-                    .pipe(map((data) => booksFetchAPISuccess({ allBooks: data })))
+                    .pipe(map((data) => booksFetchAPISuccess({ allBooks: data })
+                    ))
+            }
+            ),
+        ),
+    );
+
+    booksFetchSuccess$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(booksFetchAPISuccess),
+            delay(60000),
+            map(() => {
+                return resetBooks()
             })
         )
     );

@@ -1,6 +1,8 @@
 import { createAction, props } from "@ngrx/store";
 import { Book } from "./book";
 
+export const setData = createAction('[App] Set Data', props<{ data: Book[] }>());
+
 export const invokeBooksAPI = createAction(
     "[Books API] invoke books Fetch API"
 );
@@ -38,4 +40,8 @@ export const deleteBookAPISuccess = createAction(
 export const invokeDeleteBookAPI = createAction(
     "[Books API] Delete book API success",
     props<{ id: number }>()
+);
+
+export const resetBooks = createAction(
+    "[Books API] Reset Books in Store"
 );

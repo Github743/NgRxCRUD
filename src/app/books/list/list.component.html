@@ -1,17 +1,24 @@
 <div class="container mt-2">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+          <th scope="col" >Title</th>
+          <th scope="col">Author</th>
+          <th scope="col">Cost</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let book of books$ | async">
+                <td>{{book.title}}</td>
+                <td>{{book.author}}</td>
+                <td>{{book.cost}}</td>
+            </tr>
+        </tbody>
+    </table>
     <br>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col" *ngFor="let book of books$ | async">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ book.title }}</h5>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">{{ book.author }}</li>
-                    <li class="list-group-item">${{ book.cost }}</li>
-                </ul>
-            </div>
-            <br>
-        </div>
-    </div>
 </div>
+<button type="button" class="btn btn-primary" (click)="refresh()">Refresh</button>&nbsp;
+<!-- <app-table
+  [tableColumns]="anotherTableColumns"
+  [tableData]="anotherTableData">
+</app-table> -->
